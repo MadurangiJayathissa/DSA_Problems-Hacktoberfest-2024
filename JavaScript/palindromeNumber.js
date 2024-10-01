@@ -1,30 +1,27 @@
-
-/**
- * A palindrome number is a number that remains the same when its digits are reversed.
- * In other words, it reads the same both forward and backward.
- * Properties of Palindrome Numbers:
- * They are symmetric, so reversing their digits gives the same number.
- * Any negative number cannot be a palindrome, since the negative sign - is not symmetric.
- */
-function isPalindrome(number) {
+function isPalindrome(num) {
     // Convert the number to a string
-    const strNumber = number.toString()
-    // Set pointers at the beginning and end of the string
-    let start = 0
-    let end = strNumber.length - 1
-    // Loop through the string from both ends
-    while (start < end) {
-        // If characters at start and end don't match, it's not a palindrome
-        if (strNumber[start] !== strNumber[end]) {
-            return false
+    const str = num.toString();
+    // Initialize pointers for the start and end of the string
+    let left = 0;
+    let right = str.length - 1;
+
+    // Check for palindrome by comparing characters
+    while (left < right) {
+        if (str[left] !== str[right]) {
+            return false; // Not a palindrome
         }
-        // Move the pointers towards the center
-        start++
-        end--
+        left++;
+        right--;
     }
-    // If all characters match, it is a palindrome
-    return true
+    return true; // It's a palindrome
 }
+
+// Example usage
+const number = 12321;
+console.log(`Is ${number} a palindrome? `, isPalindrome(number)); // Output: true
+
+const anotherNumber = 12345;
+console.log(`Is ${anotherNumber} a palindrome? `, isPalindrome(anotherNumber)); // Output: false
 
 // Example usage:
 console.log('12321', isPalindrome(12321))
