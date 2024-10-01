@@ -1,46 +1,38 @@
 import heapq 
 
 def minRefuelStops(target, startFuel, stations):
-    h = []  # A max heap (simulated using negative values because Python has a min-heap by default)
-    output = 0  # keeps track of the number of refueling stops
-    prev = 0   # keeps track of the previous position the car has been at (initially the start at 0 miles)
-    fuel = startFuel   # remaining fuel in the car, initially set to startFuel
-    # The last "station" is actually the target itself with 0 fuel.
-    for distance, gas in stations + [[target, 0]]:
-      
-        fuel -= distance - prev
-        # refuel from the largest available fuel station (using max heap)
-        while h and fuel < 0:
-            # Pop the largest fuel available from the heap
-            fuel += -heapq.heappop(h)
-            output += 1
-        # If fuel is still negative, even after using all available refuels, it's impossible to reach
-        if fuel < 0:
-            return -1
-        # Push the current station's fuel into the heap (as negative to simulate max heap behavior)
-        heapq.heappush(h, -gas)
-        prev = distance
-    return output
+    # Number of gas stations
+    n = len(stations)
 
-if __name__ == "__main__":
+    # dp[i] is the maximum distance we can reach with i refueling stops
+    dp = [0] * (n + 1)
+    dp[0] = startFuel
+
+    # Iterate over each station
+    for i in range(n):
+        # station[i] gives (distance to station, fuel at station)
+        station_distance, fuel_at_station = stations[i]
+        
+        # Traverse dp array from end to start to avoid overwriting previous results
+        for j in range(i, -1, -1):
+            # If we can reach this station with j refuels
+            if dp[j] >= station_distance:
+                # Update dp[j + 1] with max distance after refueling
+                dp[j + 1] = max(dp[j + 1], dp[j] + fuel_at_station)
     
-    # Testcase: 01
-    target = 1
-    startFuel = 1
-    stations = []
-    result = minRefuelStops(target, startFuel, stations)
-    print(result) # Expected output: 0
-    
-    # Testcase: 02
-    target = 100
-    startFuel = 1
-    stations = [[10,100]]
-    result = minRefuelStops(target, startFuel, stations)
-    print(result) # Expected output: -1
-    
-    # Testacase: 03
-    target = 100
-    startFuel = 10
-    stations = [[10,60],[20,30],[30,30],[60,40]]
-    result = minRefuelStops(target, startFuel, stations)
-    print(result) # Expected output: 2
+    # Find the minimum refuels needed to reach the target
+    for i in range(n + 1):
+        if dp[i] >= target:
+            return i
+
+    # If it's not possible to reach the target
+    return -1
+
+# Example usage:
+target = 100
+startFuel = 10
+stations = [[10, 60], [20, 30], [30, 30], [60, 40]]
+
+# Calling the function
+result = minRefuelStops(target, startFuel, stations)
+print(f"Minimum number of refueling stops: {result}")
