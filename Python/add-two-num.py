@@ -21,8 +21,10 @@ def addTwoNumbers(l1, l2):
         
         # Move to the next nodes in both lists
         current = current.next
-        if l1 is not None: l1 = l1.next
-        if l2 is not None: l2 = l2.next
+        if l1 is not None:
+            l1 = l1.next
+        if l2 is not None:
+            l2 = l2.next
     
     # If there is a carry remaining, append it as a new node
     if carry > 0:
@@ -60,3 +62,4 @@ result = addTwoNumbers(l1, l2)
 # Print the result as a linked list
 print("Resultant linked list:")
 printLinkedList(result)
+
